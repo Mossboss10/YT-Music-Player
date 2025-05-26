@@ -3,31 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>YouTube Music Player</title>
+  <title>YouTube Player</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #181818;
+      background-color: #121212;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px;
-      overflow: hidden;
-    }
-
-    h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
+      text-align: center;
+      padding: 50px 20px;
     }
 
     input {
-      width: 80%;
-      max-width: 500px;
       padding: 10px;
+      width: 70%;
+      max-width: 500px;
       font-size: 1em;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       margin-bottom: 10px;
     }
 
@@ -35,7 +27,7 @@
       padding: 10px 20px;
       font-size: 1em;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       background-color: #e97d40;
       color: white;
       cursor: pointer;
@@ -46,45 +38,45 @@
       background-color: #d86e2a;
     }
 
-    #thumbnail {
-      margin-top: 20px;
-      border-radius: 12px;
-      width: 250px;
-      height: auto;
-      display: none;
-    }
-
     #playerContainer {
-      display: none;
+      margin-top: 30px;
     }
 
-    #nowPlaying {
-      margin-top: 15px;
-      font-size: 1.2em;
-      font-weight: 500;
-    }
-
-    canvas {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      height: 200px;
-      z-index: -1;
+    iframe {
+      width: 90%;
+      max-width: 800px;
+      height: 450px;
+      border: none;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>🎵 YouTube Music Player</h1>
+  <h1>🎬 YouTube Player</h1>
   <input type="text" id="ytLink" placeholder="Paste YouTube link here..." />
   <br />
   <button onclick="playYouTubeVideo()">▶ Play</button>
-  <div id="nowPlaying"></div>
-  <img id="thumbnail" src="" alt="Video Thumbnail" />
+
   <div id="playerContainer"></div>
 
-  <canvas id="visualizer"></canvas>
+  <script>
+    function extractVideoID(url) {
+      const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/|shorts\/))([^#\&\?]*).*/);
+      return match ? match[1] : null;
+    }
 
-  <!-- 🔗 External JS -->
-  <script src="script.js" defer></script>
+    function playYouTubeVideo() {
+      const url = document.getElementById("ytLink").value;
+      const videoId = extractVideoID(url);
+      const playerContainer = document.getElementById("playerContainer");
+
+      if (videoId) {
+        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1`;
+        playerContainer.innerHTML = `<iframe src="${embedUrl}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+      } else {
+        playerContainer.innerHTML = `<p style="color: red;">❌ Invalid YouTube link</p>`;
+      }
+    }
+  </script>
 </body>
 </html>
